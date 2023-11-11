@@ -1,3 +1,4 @@
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:gentext/main_controller.dart';
@@ -12,7 +13,7 @@ class MainPage extends GetView<MainController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,,
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         leading: IconButton(
           icon: const Icon(Icons.add),
           onPressed: () {},
@@ -21,28 +22,37 @@ class MainPage extends GetView<MainController> {
       ),
       body: Center(
         child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("data"),
             TextField(
               controller: controller.nameController,
             ),
             TextField(
               controller: controller.rawTextController,
             ),
-            InkWell(
+            ElevatedButton(
               child: const Text("生成"),
-              onTap: () {
+              onPressed: () {
                 controller.generate();
               },
             ),
-            ListView.builder(
-              itemCount: controller.generateList.length,
-              itemExtent: 50.0, //强制高度为50.0
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(title: Text(controller.generateList[index]));
-              },
+            Obx(
+              () => Expanded(
+                child: ListView.builder(
+                  itemCount: controller.generateList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Row(children: [
+                      IconButton(
+                          onPressed: () async {
+                            String text = controller.generateList[index];
+                            await FlutterClipboard.copy(text);
+                            Get.snackbar("copy", "");
+                          },
+                          icon: const Icon(Icons.copy)),
+                      Text(controller.generateList[index]),
+                    ]);
+                  },
+                ),
+              ),
             ),
           ],
         ),

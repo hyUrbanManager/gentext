@@ -31,6 +31,13 @@ class MainController extends GetxController {
     rawTextController.text = saveRawText;
 
     generate();
+
+    nameController.addListener(() {
+      _prefs.setString(_keyName, nameController.text);
+    });
+    rawTextController.addListener(() {
+      _prefs.setString(_keyText, rawTextController.text);
+    });
   }
 
   void generate() {
