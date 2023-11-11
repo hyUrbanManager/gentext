@@ -1,3 +1,4 @@
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -50,5 +51,18 @@ class MainController extends GetxController {
       print("error $e");
       Get.snackbar("error", "$e");
     }
+  }
+
+  Future<void> copy(int index) async {
+    String text = generateList[index];
+    await FlutterClipboard.copy(text);
+    Get.snackbar("copy", "");
+  }
+
+  Future<void> copyAll() async {
+    for (String text in generateList) {
+      await FlutterClipboard.copy(text);
+    }
+    Get.snackbar("copy all", "");
   }
 }

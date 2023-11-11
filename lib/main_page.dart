@@ -1,4 +1,3 @@
-import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:gentext/main_controller.dart';
@@ -29,11 +28,27 @@ class MainPage extends GetView<MainController> {
             TextField(
               controller: controller.rawTextController,
             ),
-            ElevatedButton(
-              child: const Text("生成"),
-              onPressed: () {
-                controller.generate();
-              },
+            Row(
+              children: [
+                SizedBox(
+                  width: 30,
+                ),
+                ElevatedButton(
+                  child: const Text("生成"),
+                  onPressed: () {
+                    controller.generate();
+                  },
+                ),
+                SizedBox(
+                  width: 30,
+                ),
+                ElevatedButton(
+                  child: const Text("一键复制"),
+                  onPressed: () {
+                    controller.copyAll();
+                  },
+                ),
+              ],
             ),
             Obx(
               () => Expanded(
@@ -43,9 +58,7 @@ class MainPage extends GetView<MainController> {
                     return Row(children: [
                       IconButton(
                           onPressed: () async {
-                            String text = controller.generateList[index];
-                            await FlutterClipboard.copy(text);
-                            Get.snackbar("copy", "");
+                            controller.copy(index);
                           },
                           icon: const Icon(Icons.copy)),
                       Text(controller.generateList[index]),
